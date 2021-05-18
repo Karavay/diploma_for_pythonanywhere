@@ -71,3 +71,27 @@ h1 {
   border: 2px solid black ;
   width:105px;
 }
+
+.photoCollage {
+  width:430px;
+  height:500px;
+  border: solid 3px black;
+  position:absolute;
+  top: 100px;
+  right: 350px;
+  margin-left:-307.5px;
+  overflow:scroll;
+}
+
+.contentImg{
+  width:90px;
+  height:120px;
+  margin: 5px;
+
+}
+
+.photoCollageTitle{
+  position:absolute;
+  top: 40px;
+  right: 430px;
+}

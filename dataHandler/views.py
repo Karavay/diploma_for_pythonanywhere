@@ -35,7 +35,7 @@ def loadOneUserData(param):# function that makes api request,param = id of vk us
 
     URL = 'https://api.vk.com/method/users.get'
 
-    PARAMS = {'fields':'sex,status,city,bdate,about,activities,books,career,connections,contacts,country,domain,education,home_town','user_id':param,'v':5.52,'access_token':'b5b6d031c6fe67acac183a1fa8238ac532130d82355bfb8dff764455d43309c35b1fac9aa64b3e70d657d'}
+    PARAMS = {'fields':'sex,status,city,bdate,about,activities,books,career,connections,contacts,country,domain,education,home_town,photo_max_orig','user_id':param,'v':5.52,'access_token':'b5b6d031c6fe67acac183a1fa8238ac532130d82355bfb8dff764455d43309c35b1fac9aa64b3e70d657d'}
 
     req = requests.get(url = URL,params = PARAMS)
 
@@ -69,6 +69,8 @@ def loadOneUserData(param):# function that makes api request,param = id of vk us
             new_data.education = requestData.get('response')[0].get('education')
             new_data.home_town = requestData.get('response')[0].get('home_town')
             new_data.received_date = timezone.now()
+            if  requestData.get('response')[0].get('photo_max_orig'):
+                new_data.photo = requestData.get('response')[0].get('photo_max_orig')
             new_data.save()
 
 
@@ -76,7 +78,10 @@ def loadOneUserData(param):# function that makes api request,param = id of vk us
 def loadUserData(request):
 
     s = sched.scheduler(time.time,time.sleep)
-    userData1 =int(UserData.objects.order_by('-received_date')[0].id) + 1
+    if UserData.objects.order_by('-received_date'):
+        userData1 =int(UserData.objects.order_by('-received_date')[0].id) + 1
+    else:
+        userData1 = 1
 
     while True:
         s.enter(0.5,0.5,loadOneUserData,(userData1,))
@@ -264,7 +269,10 @@ def loadUserDataLimited(request):
         if form.is_valid():
 
             amountOfUsers =int( form.cleaned_data.get('amountOfUsers'))
-            userData1 =int(UserData.objects.order_by('-received_date')[0].id) + 1
+            if UserData.objects.order_by('-received_date'):
+                userData1 =int(UserData.objects.order_by('-received_date')[0].id) + 1
+            else:
+                userData1 = 1
             userData2 = userData1 + amountOfUsers
 
             s = sched.scheduler(time.time,time.sleep)

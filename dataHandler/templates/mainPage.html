@@ -72,4 +72,14 @@
         {% endfor %}
       </div>
       можно нажать на имя любого пользователя и вас перенаправит на страницу с подробной информацией о нём
+      <h1 class='photoCollageTitle'>1000 last added users</h1>
+      <div class="photoCollage">
+        {% for user in userData %}
+          <a href="{% url 'extendedInfo' pk=user.pk %}">
+            {% if user.photo %}
+            <img class='contentImg' src="{{user.photo}}" alt="">
+            {% endif %}
+          </a>
+        {% endfor %}
+      </div>
 {% endblock %}
